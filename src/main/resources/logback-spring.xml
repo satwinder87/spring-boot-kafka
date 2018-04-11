@@ -1,0 +1,18 @@
+<configuration>
+    <property name="log.home" value="/var/log/directory-service"/>
+    <!-- localhost, logs on console -->
+    <springProfile name="localhost">
+        <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </encoder>
+        </appender>
+
+        <logger name="se.comhem" level="TRACE"/>
+
+        <root level="INFO">
+            <appender-ref ref="console"/>
+        </root>
+    </springProfile>
+
+</configuration>
