@@ -7,3 +7,7 @@ kafka:
   topic:
     name: test
     group-id: test
+server:
+  port: 8190
+  servlet:
+    contextPath: /Kafka
