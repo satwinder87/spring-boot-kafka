@@ -3,7 +3,6 @@ package com.test.kafka.sample.consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +13,7 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.AbstractMessageListenerContainer;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
+import org.springframework.kafka.listener.SeekToCurrentErrorHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,8 +28,8 @@ public class KafkaConsumerConfig {
     @Value("${kafka.topic.group-id}")
     private String groupId;
 
-    @Autowired
-    private KafkaListenerErrorHandler kafkaListenerErrorHandler;
+//    @Autowired
+//    private KafkaListenerErrorHandler kafkaListenerErrorHandler;
 
     @Bean
     public Map<String, Object> consumerConfigs() {
@@ -46,7 +46,7 @@ public class KafkaConsumerConfig {
         // automatically reset the offset to the earliest offset
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
-        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG,"1");
+       // props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG,"1");
        // props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG,"15000");
 
         return props;
@@ -63,7 +63,8 @@ public class KafkaConsumerConfig {
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         factory.getContainerProperties().setAckMode(AbstractMessageListenerContainer.AckMode.MANUAL_IMMEDIATE);
-        factory.getContainerProperties().setErrorHandler(kafkaListenerErrorHandler);
+        //factory.getContainerProperties().setErrorHandler(kafkaListenerErrorHandler);
+        factory.getContainerProperties().setErrorHandler(new SeekToCurrentErrorHandler());
         return factory;
     }
 
