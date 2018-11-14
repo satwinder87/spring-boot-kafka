@@ -6,9 +6,8 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.listener.AbstractMessageListenerContainer;
+import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.KafkaMessageListenerContainer;
-import org.springframework.kafka.listener.config.ContainerProperties;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +18,7 @@ public class AckContainer {
     public void consumeMessages() throws Exception{
         ContainerProperties containerProperties = new ContainerProperties("test");
         containerProperties.setMessageListener(new AckListener());
-        containerProperties.setAckMode(AbstractMessageListenerContainer.AckMode.MANUAL_IMMEDIATE);
+        containerProperties.setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
         KafkaMessageListenerContainer<Integer,String> messageListenerContainer = createContainer(containerProperties);
         messageListenerContainer.setBeanName("testClient");
         messageListenerContainer.start();
